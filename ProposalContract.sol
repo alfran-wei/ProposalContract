@@ -2,14 +2,13 @@
 pragma solidity ^0.8.18;
 
 contract ProposalContract {
-
+    uint256 private counter;
     struct MoreDescription {
         string title;
         uint256 id;
         uint date;
     }
     struct Proposal {
-        uint256 private counter;
         MoreDescription description; // Description of the proposal
         uint256 approve; // Number of approve votes
         uint256 reject; // Number of reject votes
