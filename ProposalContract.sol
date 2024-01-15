@@ -9,6 +9,7 @@ contract ProposalContract {
         uint date;
     }
     struct Proposal {
+        uint256 private counter;
         MoreDescription description; // Description of the proposal
         uint256 approve; // Number of approve votes
         uint256 reject; // Number of reject votes
