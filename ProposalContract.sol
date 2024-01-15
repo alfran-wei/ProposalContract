@@ -5,8 +5,8 @@ contract ProposalContract {
     uint256 private counter;
     struct MoreDescription {
         string title;
-        uint256 id;
         uint date;
+        string total_description;
     }
     struct Proposal {
         MoreDescription description; // Description of the proposal
@@ -19,4 +19,9 @@ contract ProposalContract {
     }
 
     mapping(uint256 => Proposal) proposal_history; // Recordings of previous proposals
+    // function which creating a proposal 
+    function creer(string memory title,string calldata _description, uint256 _total_vote_to_end) external {
+    counter += 1;
+    proposal_history[counter] = Proposal(MoreDescription(title,block.timestamp,_description), 0, 0, 0, _total_vote_to_end, false, true);
+    }
 }
