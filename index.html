@@ -5,83 +5,74 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Proposal DApp - Sepolia Testnet</title>
   <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
+
 </head>
 <body>
   <div class="container">
     <header>
       <h1>🗳️ Proposal DApp</h1>
-      <p class="subtitle">Decentralized voting platform on Sepolia Testnet</p>
+      <p>Vote on decentralized proposals — Sepolia Testnet</p>
     </header>
 
-    <div class="wallet-section">
-      <button id="connectBtn">
-        <span id="connectText">🦊 Connect MetaMask</span>
-      </button>
-      <div id="account"></div>
-    </div>
+    <section class="wallet">
+      <button id="connectBtn">🦊 Connect MetaMask</button>
+      <p id="account"></p>
+    </section>
 
-    <div class="grid">
-      <div class="card">
-        <h3>
-          <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-          </svg>
-          Create a Proposal
-        </h3>
-        <label class="label">Proposal Title</label>
-        <input type="text" id="title" placeholder="Ex: Improve DAO Governance">
-        
-        <label class="label">Detailed Description</label>
-        <textarea id="description" placeholder="Describe your proposal in detail..."></textarea>
-        
-        <label class="label">Vote limit to close</label>
-        <input type="number" id="voteLimit" placeholder="Ex: 100" min="1">
-        
-        <button id="createBtn">
-          <span id="createText">✨ Create Proposal</span>
-        </button>
+    <section>
+      <h2>📋 All Proposals</h2>
+      <div id="proposalList">
+        <div class="loading-proposals">
+          <div class="spinner"></div>
+          <p style="color: #6b7280; font-size: 1.2rem;">Loading proposals...</p>
+        </div>
       </div>
+    </section>
 
-      <div class="card">
-        <h3>
-          <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-          Vote
-        </h3>
-        <label class="label">Choose your vote</label>
-        <select id="voteChoice">
-          <option value="1">✅ Approve</option>
-          <option value="2">❌ Reject</option>
-          <option value="0">⏭️ Pass</option>
-        </select>
-        
-        <button id="voteBtn">
-          <span id="voteText">🗳️ Submit My Vote</span>
-        </button>
+    <section class="create">
+      <h2>Create Proposal</h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 0.5fr; gap: 1rem; align-items: end;">
+        <div>
+          <label style="display: block; margin-bottom: 0.5rem; color: #4b5563; font-weight: 600; font-size: 0.9rem;">Title</label>
+          <input type="text" id="title" placeholder="Proposal title" style="margin-bottom: 0;">
+        </div>
+        <div>
+          <label style="display: block; margin-bottom: 0.5rem; color: #4b5563; font-weight: 600; font-size: 0.9rem;">Description</label>
+          <input type="text" id="desc" placeholder="Description" style="margin-bottom: 0;">
+        </div>
+        <div>
+          <label style="display: block; margin-bottom: 0.5rem; color: #4b5563; font-weight: 600; font-size: 0.9rem;">Vote limit</label>
+          <input type="number" id="limit" placeholder="Limit" min="1" style="margin-bottom: 0;">
+        </div>
+        <button id="createBtn" style="margin-bottom: 0;">✨ Create</button>
       </div>
-
-      <div class="card">
-        <h3>
-          <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-          </svg>
-          Current Proposal
-        </h3>
-        <button id="getProposalBtn">
-          <span id="fetchText">🔍 Fetch Data</span>
-        </button>
-        <pre id="proposalData"></pre>
-      </div>
-    </div>
+    </section>
   </div>
+
+  <footer>
+    <p>💧 Need Sepolia ETH? <a href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia" target="_blank">Get it here</a></p>
+    <p>Built by <strong>Alfran Essone</strong> © 2025</p>
+  </footer>
 
   <script>
     let web3;
     let contract;
-    const contractAddress = "0x727B9C4D89dFA700Ae22bC107692d13204630F84";
+    const contractAddress = "0xF5413a613C086c703760b77FC15423bd82f1F57C";
     const contractABI = [
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			}
+		],
+		"name": "closeProposal",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
 	{
 		"inputs": [
 			{
@@ -120,18 +111,16 @@
 	},
 	{
 		"inputs": [],
-		"name": "teminateProposal",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
 	},
 	{
 		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "proposalId",
+				"type": "uint256"
+			},
 			{
 				"internalType": "uint8",
 				"name": "choice",
@@ -145,7 +134,20 @@
 	},
 	{
 		"inputs": [],
-		"name": "getCurrentProposal",
+		"name": "counter",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getAllProposals",
 		"outputs": [
 			{
 				"components": [
@@ -200,11 +202,16 @@
 						"internalType": "bool",
 						"name": "is_active",
 						"type": "bool"
+					},
+					{
+						"internalType": "address[]",
+						"name": "voters",
+						"type": "address[]"
 					}
 				],
-				"internalType": "struct ProposalContract.Proposal",
+				"internalType": "struct ProposalContract.Proposal[]",
 				"name": "",
-				"type": "tuple"
+				"type": "tuple[]"
 			}
 		],
 		"stateMutability": "view",
@@ -214,7 +221,7 @@
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "number",
+				"name": "id",
 				"type": "uint256"
 			}
 		],
@@ -273,6 +280,11 @@
 						"internalType": "bool",
 						"name": "is_active",
 						"type": "bool"
+					},
+					{
+						"internalType": "address[]",
+						"name": "voters",
+						"type": "address[]"
 					}
 				],
 				"internalType": "struct ProposalContract.Proposal",
@@ -286,12 +298,17 @@
 	{
 		"inputs": [
 			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
 				"internalType": "address",
-				"name": "_address",
+				"name": "voter",
 				"type": "address"
 			}
 		],
-		"name": "isVoted",
+		"name": "hasVoted",
 		"outputs": [
 			{
 				"internalType": "bool",
@@ -301,111 +318,232 @@
 		],
 		"stateMutability": "view",
 		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "proposal_history",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "date",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "total_description",
+						"type": "string"
+					}
+				],
+				"internalType": "struct ProposalContract.MoreDescription",
+				"name": "description",
+				"type": "tuple"
+			},
+			{
+				"internalType": "uint256",
+				"name": "approve",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "reject",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "pass",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "total_vote_to_end",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "current_state",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "is_active",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
 	}
-];
+]; // (ABI content unchanged)
 
-    function showLoading(buttonId, textId) {
-      const btn = document.getElementById(buttonId);
-      const text = document.getElementById(textId);
-      const originalText = text.innerHTML;
-      btn.disabled = true;
-      text.innerHTML = '<span class="loading"></span>';
-      return originalText;
-    }
-
-    function hideLoading(buttonId, textId, originalText) {
-      const btn = document.getElementById(buttonId);
-      const text = document.getElementById(textId);
-      btn.disabled = false;
-      text.innerHTML = originalText;
-    }
-
-    document.getElementById("connectBtn").onclick = async () => {
-      const originalText = showLoading('connectBtn', 'connectText');
-      
+    async function connect() {
       try {
         if (window.ethereum) {
           web3 = new Web3(window.ethereum);
           await ethereum.request({ method: "eth_requestAccounts" });
           const accounts = await web3.eth.getAccounts();
-          
-          document.getElementById("account").innerHTML = `
-            <span class="status-badge status-connected">● Connected</span><br>
-            <strong>Address:</strong> ${accounts[0]}
-          `;
-          
+          document.getElementById("account").innerText = `✅ Connected: ${accounts[0]}`;
           contract = new web3.eth.Contract(contractABI, contractAddress);
-          document.getElementById('connectText').innerHTML = '✓ Connected';
+          loadProposals();
         } else {
-          alert("❌ Please install MetaMask to use this application!");
-          hideLoading('connectBtn', 'connectText', originalText);
+          alert("❌ Please install MetaMask to use this DApp!");
         }
       } catch (error) {
         console.error(error);
         alert("Connection error: " + error.message);
-        hideLoading('connectBtn', 'connectText', originalText);
       }
-    };
+    }
 
-    document.getElementById("createBtn").onclick = async () => {
-      const originalText = showLoading('createBtn', 'createText');
+    document.getElementById("connectBtn").onclick = connect;
+
+    async function createProposal() {
+      const btn = document.getElementById("createBtn");
+      const originalText = btn.innerHTML;
       
       try {
         const title = document.getElementById("title").value;
-        const desc = document.getElementById("description").value;
-        const limit = document.getElementById("voteLimit").value;
+        const desc = document.getElementById("desc").value;
+        const limit = document.getElementById("limit").value;
         
-        if (!title || !desc || !limit) {
-          alert("⚠️ Please fill in all fields");
-          hideLoading('createBtn', 'createText', originalText);
-          return;
-        }
+        if (!title || !desc || !limit) return alert("⚠️ Please fill in all fields!");
+        
+        btn.disabled = true;
+        btn.innerHTML = 'Creating... <span class="loading"></span>';
         
         const accounts = await web3.eth.getAccounts();
         await contract.methods.create(title, desc, limit).send({ from: accounts[0] });
         
-        alert("✅ Proposal created successfully!");
+        alert("✅ Proposal successfully created!");
         document.getElementById("title").value = "";
-        document.getElementById("description").value = "";
-        document.getElementById("voteLimit").value = "";
-      } catch (error) {
-        console.error(error);
-        alert("❌ Error: " + error.message);
-      } finally {
-        hideLoading('createBtn', 'createText', originalText);
-      }
-    };
-
-    document.getElementById("voteBtn").onclick = async () => {
-      const originalText = showLoading('voteBtn', 'voteText');
-      
-      try {
-        const choice = document.getElementById("voteChoice").value;
-        const accounts = await web3.eth.getAccounts();
-        await contract.methods.vote(choice).send({ from: accounts[0] });
+        document.getElementById("desc").value = "";
+        document.getElementById("limit").value = "";
         
-        alert("✅ Vote submitted successfully!");
+        loadProposals();
       } catch (error) {
         console.error(error);
         alert("❌ Error: " + error.message);
       } finally {
-        hideLoading('voteBtn', 'voteText', originalText);
+        btn.disabled = false;
+        btn.innerHTML = originalText;
       }
-    };
+    }
 
-    document.getElementById("getProposalBtn").onclick = async () => {
-      const originalText = showLoading('getProposalBtn', 'fetchText');
-      
+    document.getElementById("createBtn").onclick = createProposal;
+
+    async function loadProposals() {
       try {
-        const data = await contract.methods.getCurrentProposal().call();
-        document.getElementById("proposalData").textContent = JSON.stringify(data, null, 2);
+        // Display loading spinner
+        document.getElementById("proposalList").innerHTML = `
+          <div class="loading-proposals">
+            <div class="spinner"></div>
+            <p style="color: #6b7280; font-size: 1.2rem;">Loading proposals...</p>
+          </div>
+        `;
+        
+        const proposals = await contract.methods.getAllProposals().call();
+        let html = "";
+        
+        if (proposals.length === 0) {
+          html = `
+            <div class="empty-state">
+              <div class="emoji">📭</div>
+              <p>No proposals at the moment.</p>
+              <p style="font-size: 1rem; margin-top: 1rem; color: #9ca3af;">Be the first to create one!</p>
+            </div>
+          `;
+        } else {
+          proposals.forEach((p, i) => {
+            const id = i + 1;
+            const date = new Date(Number(p.description.date) * 1000).toLocaleString('en-US');
+            const statusClass = p.is_active ? 'status-active' : 'status-closed';
+            const statusText = p.is_active ? '🟢 Active' : '🔴 Closed';
+            
+            html += `
+              <div class="card">
+                <h3>Proposal #${id} — ${p.description.title}</h3>
+                <p><strong>Description:</strong> ${p.description.total_description}</p>
+                <p><strong>Created on:</strong> ${date}</p>
+                
+                <div class="votes-summary">
+                  <span class="vote-item">✅ Approve: ${p.approve}</span>
+                  <span class="vote-item">❌ Reject: ${p.reject}</span>
+                  <span class="vote-item">⏭️ Pass: ${p.pass}</span>
+                </div>
+                
+                <p><span class="${statusClass}">${statusText}</span></p>
+                
+                ${p.is_active ? `
+                  <div style="margin-top: 1.5rem;">
+                    <button class="btn-approve" onclick="vote(${id}, 1)">✅ Approve</button>
+                    <button class="btn-reject" onclick="vote(${id}, 2)">❌ Reject</button>
+                    <button class="btn-pass" onclick="vote(${id}, 0)">⏭️ Pass</button>
+                  </div>
+                ` : '<p style="margin-top: 1rem; color: #9ca3af; font-style: italic;">This proposal is closed</p>'}
+              </div>
+            `;
+          });
+        }
+        
+        document.getElementById("proposalList").innerHTML = html;
       } catch (error) {
         console.error(error);
-        document.getElementById("proposalData").textContent = "❌ Error while fetching: " + error.message;
-      } finally {
-        hideLoading('getProposalBtn', 'fetchText', originalText);
+        document.getElementById("proposalList").innerHTML = `
+          <div class="empty-state">
+            <div class="emoji">❌</div>
+            <p>Error while loading proposals</p>
+            <p style="font-size: 1rem; margin-top: 1rem; color: #9ca3af;">Make sure you are connected to the Sepolia network</p>
+          </div>
+        `;
       }
-    };
+    }
+
+    async function vote(id, choice) {
+      const choiceNames = {0: "Pass", 1: "Approve", 2: "Reject"};
+      
+      try {
+        const accounts = await web3.eth.getAccounts();
+        
+        // Disable all vote buttons for this card
+        const buttons = document.querySelectorAll(`button[onclick*="vote(${id}"]`);
+        buttons.forEach(btn => {
+          btn.disabled = true;
+          btn.innerHTML = 'Voting... <span class="loading"></span>';
+        });
+        
+        await contract.methods.vote(id, choice).send({ from: accounts[0] });
+        
+        alert(`✅ Vote "${choiceNames[choice]}" recorded for Proposal #${id}`);
+        loadProposals();
+      } catch (error) {
+        console.error(error);
+        alert("❌ Error while voting: " + error.message);
+        loadProposals(); // Reload to reactivate buttons
+      }
+    }
   </script>
 </body>
 </html>

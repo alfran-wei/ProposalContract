@@ -9,12 +9,12 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
-      padding: 2rem;
+      padding: 2rem 1rem;
       color: #1f2937;
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
     }
 
@@ -24,30 +24,110 @@
       animation: fadeInDown 0.8s ease;
     }
 
-    h1 {
+    header h1 {
       color: white;
-      font-size: 2.5rem;
+      font-size: 3rem;
       font-weight: 700;
       margin-bottom: 0.5rem;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
     }
 
-    .subtitle {
-      color: rgba(255,255,255,0.9);
-      font-size: 1.1rem;
+    header p {
+      color: rgba(255,255,255,0.95);
+      font-size: 1.2rem;
+      font-weight: 300;
     }
 
-    .wallet-section {
+    .wallet {
       background: white;
-      border-radius: 16px;
+      border-radius: 20px;
       padding: 2rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      margin-bottom: 2.5rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
       animation: fadeInUp 0.8s ease;
+      text-align: center;
     }
 
     #connectBtn {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 1.2rem 3rem;
+      border-radius: 15px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    #connectBtn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+    }
+
+    #account {
+      margin-top: 1.5rem;
+      padding: 1rem 1.5rem;
+      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+      border-radius: 12px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.95rem;
+      color: #374151;
+      word-break: break-all;
+      display: inline-block;
+      max-width: 100%;
+    }
+
+    .create {
+      background: white;
+      border-radius: 20px;
+      padding: 1.5rem 2.5rem;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      animation: fadeInUp 1s ease;
+    }
+
+    .create h2 {
+      color: #667eea;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .create h2::before {
+      content: "✨";
+      font-size: 1.3rem;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      margin-bottom: 1.2rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      font-family: inherit;
+      background: #f9fafb;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    #createBtn {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
       color: white;
       border: none;
       padding: 1rem 2rem;
@@ -57,168 +137,193 @@
       cursor: pointer;
       transition: all 0.3s ease;
       width: 100%;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
     }
 
-    #connectBtn:hover {
+    #createBtn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.6);
     }
 
-    #account {
-      margin-top: 1rem;
-      padding: 1rem;
-      background: #f3f4f6;
-      border-radius: 8px;
-      font-family: 'Courier New', monospace;
-      font-size: 0.9rem;
-      color: #4b5563;
-      word-break: break-all;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 2rem;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      animation: fadeInUp 1s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 50px rgba(0,0,0,0.15);
-    }
-
-    .card h3 {
-      color: #667eea;
-      font-size: 1.5rem;
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .icon {
-      width: 24px;
-      height: 24px;
-      display: inline-block;
-    }
-
-    input, textarea, select {
-      width: 100%;
-      padding: 0.9rem;
-      margin-bottom: 1rem;
-      border: 2px solid #e5e7eb;
-      border-radius: 10px;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-      font-family: inherit;
-    }
-
-    input:focus, textarea:focus, select:focus {
-      outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    button:not(#connectBtn) {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      padding: 0.9rem 1.5rem;
-      border-radius: 10px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      width: 100%;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-    }
-
-    button:not(#connectBtn):hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
-    }
-
-    button:disabled {
+    #createBtn:disabled {
       opacity: 0.6;
       cursor: not-allowed;
       transform: none;
     }
 
-    #proposalData {
-      background: #1f2937;
-      color: #10b981;
-      padding: 1.5rem;
-      border-radius: 10px;
-      overflow-x: auto;
-      font-family: 'Courier New', monospace;
-      font-size: 0.9rem;
-      line-height: 1.6;
-      max-height: 400px;
-      overflow-y: auto;
+    section > h2 {
+      color: white;
+      font-size: 2.2rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+      animation: fadeInUp 1.2s ease;
     }
 
-    .label {
-      display: block;
-      margin-bottom: 0.5rem;
-      color: #4b5563;
-      font-weight: 600;
-      font-size: 0.9rem;
+    #proposalList {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+      gap: 2rem;
+      animation: fadeInUp 1.4s ease;
     }
 
-    .status-badge {
-      display: inline-block;
-      padding: 0.4rem 0.8rem;
+    .card {
+      background: white;
       border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-top: 0.5rem;
+      padding: 2rem;
+      box-shadow: 0 15px 45px rgba(0,0,0,0.12);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 2px solid transparent;
+      position: relative;
+      overflow: hidden;
     }
 
-    .status-connected {
-      background: #d1fae5;
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+      border-color: #667eea;
+    }
+
+    .card h3 {
+      color: #1f2937;
+      font-size: 1.5rem;
+      margin-bottom: 1.2rem;
+      line-height: 1.4;
+    }
+
+    .card p {
+      color: #4b5563;
+      margin-bottom: 0.8rem;
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    .card p strong {
+      color: #1f2937;
+      font-weight: 600;
+    }
+
+    .card button {
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 0.5rem 0.3rem 0 0;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .card button:hover {
+      transform: translateY(-2px);
+    }
+
+    .card button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-approve {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+
+    .btn-approve:hover {
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+    }
+
+    .btn-reject {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    }
+
+    .btn-reject:hover {
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
+    }
+
+    .btn-pass {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    }
+
+    .btn-pass:hover {
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+    }
+
+    .status-active {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
       color: #065f46;
     }
 
-    .status-disconnected {
-      background: #fee2e2;
+    .status-closed {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
       color: #991b1b;
     }
 
-    @keyframes fadeInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .votes-summary {
+      display: flex;
+      gap: 1.5rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: #f9fafb;
+      border-radius: 12px;
+      flex-wrap: wrap;
     }
 
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .vote-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+
+    footer {
+      margin-top: 4rem;
+      text-align: center;
+      color: white;
+      padding: 2rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      animation: fadeInUp 1.6s ease;
+    }
+
+    footer p {
+      margin: 0.5rem 0;
+      font-size: 1rem;
+    }
+
+    footer a {
+      color: #fbbf24;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+      color: #f59e0b;
+      text-decoration: underline;
     }
 
     .loading {
@@ -229,26 +334,94 @@
       border-radius: 50%;
       border-top-color: white;
       animation: spin 1s ease-in-out infinite;
+      margin-left: 0.5rem;
+    }
+
+    .loading-proposals {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 15px 45px rgba(0,0,0,0.1);
+    }
+
+    .loading-proposals .spinner {
+      width: 60px;
+      height: 60px;
+      border: 5px solid #e5e7eb;
+      border-radius: 50%;
+      border-top-color: #667eea;
+      animation: spin 1s ease-in-out infinite;
+      margin: 0 auto 1.5rem;
     }
 
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
 
-    @media (max-width: 768px) {
-      body {
-        padding: 1rem;
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
       }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-      h1 {
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 15px 45px rgba(0,0,0,0.1);
+    }
+
+    .empty-state .emoji {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .empty-state p {
+      font-size: 1.3rem;
+      color: #6b7280;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
         font-size: 2rem;
       }
 
-      .grid {
+      header p {
+        font-size: 1rem;
+      }
+
+      #proposalList {
         grid-template-columns: 1fr;
       }
 
-      .card {
+      .create, .wallet {
         padding: 1.5rem;
+      }
+
+      .create > div {
+        grid-template-columns: 1fr !important;
+      }
+
+      .votes-summary {
+        flex-direction: column;
+        gap: 0.8rem;
       }
     }
