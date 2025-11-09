@@ -1,6 +1,6 @@
 # 🗳️ Proposal DApp — Blockchain Voting Platform
 
-![App Screenshot](./static/proposal_home.png)
+![App Screenshot](proposal_home.png)
 
 A decentralized web application built with **HTML**, **CSS**, and **Web3.js** that allows users to **create**, **view**, and **vote** on proposals stored on the **Ethereum blockchain (Sepolia Testnet)**.  
 The DApp connects to **MetaMask** and interacts directly with a **Solidity Smart Contract** to ensure full transparency and vote integrity.
@@ -62,7 +62,7 @@ This design ensures **full transparency** and **immutability of decisions** thro
 ---
 
 ## 🖼️ Project Interface
-![App Interface](./static/proposal_transaction.png)
+![App Interface](proposal_transaction.png)
 
 The interface is divided into three main sections:  
 - **Connection** – authentication via MetaMask.  
