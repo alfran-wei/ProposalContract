@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proposal DApp - Sepolia Testnet</title>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🗳️ Proposal DApp</h1>
+      <p class="subtitle">Decentralized voting platform on Sepolia Testnet</p>
+    </header>
+
+    <div class="wallet-section">
+      <button id="connectBtn">
+        <span id="connectText">🦊 Connect MetaMask</span>
+      </button>
+      <div id="account"></div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>
+          <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          Create a Proposal
+        </h3>
+        <label class="label">Proposal Title</label>
+        <input type="text" id="title" placeholder="Ex: Improve DAO Governance">
+        
+        <label class="label">Detailed Description</label>
+        <textarea id="description" placeholder="Describe your proposal in detail..."></textarea>
+        
+        <label class="label">Vote limit to close</label>
+        <input type="number" id="voteLimit" placeholder="Ex: 100" min="1">
+        
+        <button id="createBtn">
+          <span id="createText">✨ Create Proposal</span>
+        </button>
+      </div>
+
+      <div class="card">
+        <h3>
+          <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          Vote
+        </h3>
+        <label class="label">Choose your vote</label>
+        <select id="voteChoice">
+          <option value="1">✅ Approve</option>
+          <option value="2">❌ Reject</option>
+          <option value="0">⏭️ Pass</option>
+        </select>
+        
+        <button id="voteBtn">
+          <span id="voteText">🗳️ Submit My Vote</span>
+        </button>
+      </div>
+
+      <div class="card">
+        <h3>
+          <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          Current Proposal
+        </h3>
+        <button id="getProposalBtn">
+          <span id="fetchText">🔍 Fetch Data</span>
+        </button>
+        <pre id="proposalData"></pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let web3;
+    let contract;
+    const contractAddress = "0x727B9C4D89dFA700Ae22bC107692d13204630F84";
+    const contractABI = [
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "title",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_description",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_total_vote_to_end",
+				"type": "uint256"
+			}
+		],
+		"name": "create",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "new_owner",
+				"type": "address"
+			}
+		],
+		"name": "setOwner",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "teminateProposal",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint8",
+				"name": "choice",
+				"type": "uint8"
+			}
+		],
+		"name": "vote",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getCurrentProposal",
+		"outputs": [
+			{
+				"components": [
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "title",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "date",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "total_description",
+								"type": "string"
+							}
+						],
+						"internalType": "struct ProposalContract.MoreDescription",
+						"name": "description",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint256",
+						"name": "approve",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "reject",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "pass",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "total_vote_to_end",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "current_state",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "is_active",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct ProposalContract.Proposal",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "number",
+				"type": "uint256"
+			}
+		],
+		"name": "getProposal",
+		"outputs": [
+			{
+				"components": [
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "title",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "date",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "total_description",
+								"type": "string"
+							}
+						],
+						"internalType": "struct ProposalContract.MoreDescription",
+						"name": "description",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint256",
+						"name": "approve",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "reject",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "pass",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "total_vote_to_end",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "current_state",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "is_active",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct ProposalContract.Proposal",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_address",
+				"type": "address"
+			}
+		],
+		"name": "isVoted",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+
+    function showLoading(buttonId, textId) {
+      const btn = document.getElementById(buttonId);
+      const text = document.getElementById(textId);
+      const originalText = text.innerHTML;
+      btn.disabled = true;
+      text.innerHTML = '<span class="loading"></span>';
+      return originalText;
+    }
+
+    function hideLoading(buttonId, textId, originalText) {
+      const btn = document.getElementById(buttonId);
+      const text = document.getElementById(textId);
+      btn.disabled = false;
+      text.innerHTML = originalText;
+    }
+
+    document.getElementById("connectBtn").onclick = async () => {
+      const originalText = showLoading('connectBtn', 'connectText');
+      
+      try {
+        if (window.ethereum) {
+          web3 = new Web3(window.ethereum);
+          await ethereum.request({ method: "eth_requestAccounts" });
+          const accounts = await web3.eth.getAccounts();
+          
+          document.getElementById("account").innerHTML = `
+            <span class="status-badge status-connected">● Connected</span><br>
+            <strong>Address:</strong> ${accounts[0]}
+          `;
+          
+          contract = new web3.eth.Contract(contractABI, contractAddress);
+          document.getElementById('connectText').innerHTML = '✓ Connected';
+        } else {
+          alert("❌ Please install MetaMask to use this application!");
+          hideLoading('connectBtn', 'connectText', originalText);
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Connection error: " + error.message);
+        hideLoading('connectBtn', 'connectText', originalText);
+      }
+    };
+
+    document.getElementById("createBtn").onclick = async () => {
+      const originalText = showLoading('createBtn', 'createText');
+      
+      try {
+        const title = document.getElementById("title").value;
+        const desc = document.getElementById("description").value;
+        const limit = document.getElementById("voteLimit").value;
+        
+        if (!title || !desc || !limit) {
+          alert("⚠️ Please fill in all fields");
+          hideLoading('createBtn', 'createText', originalText);
+          return;
+        }
+        
+        const accounts = await web3.eth.getAccounts();
+        await contract.methods.create(title, desc, limit).send({ from: accounts[0] });
+        
+        alert("✅ Proposal created successfully!");
+        document.getElementById("title").value = "";
+        document.getElementById("description").value = "";
+        document.getElementById("voteLimit").value = "";
+      } catch (error) {
+        console.error(error);
+        alert("❌ Error: " + error.message);
+      } finally {
+        hideLoading('createBtn', 'createText', originalText);
+      }
+    };
+
+    document.getElementById("voteBtn").onclick = async () => {
+      const originalText = showLoading('voteBtn', 'voteText');
+      
+      try {
+        const choice = document.getElementById("voteChoice").value;
+        const accounts = await web3.eth.getAccounts();
+        await contract.methods.vote(choice).send({ from: accounts[0] });
+        
+        alert("✅ Vote submitted successfully!");
+      } catch (error) {
+        console.error(error);
+        alert("❌ Error: " + error.message);
+      } finally {
+        hideLoading('voteBtn', 'voteText', originalText);
+      }
+    };
+
+    document.getElementById("getProposalBtn").onclick = async () => {
+      const originalText = showLoading('getProposalBtn', 'fetchText');
+      
+      try {
+        const data = await contract.methods.getCurrentProposal().call();
+        document.getElementById("proposalData").textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        console.error(error);
+        document.getElementById("proposalData").textContent = "❌ Error while fetching: " + error.message;
+      } finally {
+        hideLoading('getProposalBtn', 'fetchText', originalText);
+      }
+    };
+  </script>
+</body>
+</html>
