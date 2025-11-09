@@ -62,7 +62,7 @@ This design ensures **full transparency** and **immutability of decisions** thro
 ---
 
 ## 🖼️ Project Interface
-![App Interface](./static/proposal_interface.png)
+![App Interface](./static/proposal_transaction.png)
 
 The interface is divided into three main sections:  
 - **Connection** – authentication via MetaMask.  
@@ -73,7 +73,7 @@ The interface is divided into three main sections:
 
 ## 🌐 Live Demo
 
-Demo Link: [https://your-dapp-url.vercel.app/](#)  
+Demo Link: [https://proposal-dapp-xi.vercel.app/](#)  
 Sepolia Faucet: [https://cloud.google.com/application/web3/faucet/ethereum/sepolia](https://cloud.google.com/application/web3/faucet/ethereum/sepolia)
 
 ---
